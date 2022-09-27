@@ -20,20 +20,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 180, unique: true), Groups("user_read")]
     private ?string $mail = null;
 
     #[ORM\Column]
     private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255), Groups("user_read")]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255), Groups("user_read")]
     private ?string $lastname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $birthdate = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE), Groups("user_read")]
+    private ?\DateTime $birthdate = null;
 
     #[ORM\Column(length: 1)]
     private ?string $gender = null;
@@ -162,12 +162,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?\DateTime
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(\DateTimeInterface $birthdate): self
+    public function setBirthdate(\DateTime $birthdate): self
     {
         $this->birthdate = $birthdate;
 
