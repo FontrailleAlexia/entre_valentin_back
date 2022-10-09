@@ -17,7 +17,7 @@ class UserController extends AbstractController
     /**
      * Création d'un utilisateur
      */
-    #[Route('/register', name: 'register')]
+    #[Route('/api/register', name: 'register')]
     public function register(UploaderHelper $uploaderHelper, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordEncoder, Request $request, ValidatorInterface $validator)
     {
         $userData = $request->request->all();
@@ -32,8 +32,8 @@ class UserController extends AbstractController
         //$user = $this->getUser();
 
         //$user->setUser($user);
-        $user->setMail($userData['mail']);
         $user->setFirstname($userData['firstname']);
+        $user->setMail($userData['mail']);
         $user->setLastname($userData['lastname']);
         $user->setBirthdate(new \DateTime($userData['birthdate']));
         //$user->setBirthdate($userData['birthdate']);
