@@ -38,7 +38,6 @@ class UserController extends AbstractController
         $user->setBirthdate(new \DateTime($userData['birthdate']));
         //$user->setBirthdate($userData['birthdate']);
         $user->setGender($userData['gender']);
-        $user->setLogin($userData['login']);
         //$user->setStudy($userData['study']);
         $user->setCity($userData['city']);
         //$user->setWork($userData['work']);
