@@ -38,9 +38,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 1)]
     private ?string $gender = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $login = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $study = null;
 
@@ -185,18 +182,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGender(string $gender): self
     {
         $this->gender = $gender;
-
-        return $this;
-    }
-
-    public function getLogin(): ?string
-    {
-        return $this->login;
-    }
-
-    public function setLogin(string $login): self
-    {
-        $this->login = $login;
 
         return $this;
     }
