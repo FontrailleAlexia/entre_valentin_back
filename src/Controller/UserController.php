@@ -42,6 +42,7 @@ class UserController extends AbstractController
         $user->setCity($userData['city']);
         //$user->setWork($userData['work']);
         $user->setPassword($userData['password']);
+        $user->setPassword($userData['search']);
         $user->setRoles(['ROLE_USER']);
 
         $password = $user->getPassword();
