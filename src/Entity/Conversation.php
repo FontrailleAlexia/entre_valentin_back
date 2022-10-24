@@ -5,9 +5,13 @@ namespace App\Entity;
 use App\Repository\ConversationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Schema\Index;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConversationRepository::class)]
+#[ORM\Index(name: 'last_message_id_index', columns: ['last_message_id'])]
+//#[ORM\Index(name: 'category_idx', columns: ['name', 'description'], flags: ['fulltext'])]
+// @ORM\Table(indexes={@Index(name="last_message_id_index", columns={"last_message_id"})})
 class Conversation
 {
     #[ORM\Id]
