@@ -95,12 +95,8 @@ ConversationRepository $conversationRepository)
         ], Response::HTTP_CREATED, [], []);
     }
     
-    
-    /**
-     * @Route("/", name="getConversations", methods={"GET"})
-     */
+    #[Route('/', name: 'getConversations', methods:['GET'])]
     public function getConvs() {
-        dd($this->getUser());
         $conversations = $this->conversationRepository->findConversationsByUser($this->getUser()->getId());
         
 

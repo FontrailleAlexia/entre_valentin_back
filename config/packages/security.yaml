@@ -17,6 +17,7 @@ security:
     firewalls:
         register:
             pattern: ^/api/register
+            # custom_authenticator: App\Security\Authenticator
         login:
             pattern: ^/api/login
             stateless: true
@@ -26,6 +27,11 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 username_path: username
                 password_path: password
+            custom_authenticator: App\Security\Authenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
         api:
             pattern: ^/api
             stateless: true
