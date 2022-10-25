@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Conversation;
 use App\Entity\Participant;
+use App\Entity\User;
 use App\Repository\ConversationRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,25 +40,25 @@ ConversationRepository $conversationRepository)
     }
 
     #[Route('/', name: 'newConversations', methods:['POST'])]
-    public function index(Request $request)
+    public function index(Request $request, User $user)
     {
         $otherUser = $request->get('otherUser', 0);
         $otherUser = $this->userRepository->find($otherUser);
-        
+        $userId = $user->getId();
 
         if (is_null($otherUser)) {
             throw new \Exception("The user was not found");
         }
 
         // cannot create a conversation with myself
-        if ($otherUser->getId() === $this->getUser()->getId()) {
+        if ($otherUser->getId() === $userId) {
             throw new \Exception("That's deep but you cannot create a conversation with yourself");
         }
 
         // Check if conversation already exists
         $conversation = $this->conversationRepository->findConversationByParticipants(
             $otherUser->getId(),
-            $this->getUser()->getId()
+            $userId
         );
 
         if (count($conversation)) {
