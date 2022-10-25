@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Conversation;
-use App\Entity\Participant;
 use App\Entity\User;
-use App\Repository\ConversationRepository;
+use App\Entity\Participant;
+use App\Entity\Conversation;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\ParticipantRepository;
+use App\Repository\ConversationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/conversations', name: 'conversations.')]
 class ConversationController extends AbstractController
@@ -30,28 +31,32 @@ class ConversationController extends AbstractController
      */
     private $conversationRepository;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, ConversationRepository $conversationRepository)
+    public function __construct(ParticipantRepository $participantRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, ConversationRepository $conversationRepository)
     {
         $this->userRepository = $userRepository;
+        $this->participantRepository = $participantRepository;
         $this->entityManager = $entityManager;
         $this->conversationRepository = $conversationRepository;
     }
 
-    #[Route('/{id}', name: 'newConversations', methods:['POST'])]
+    #[Route('/{id}', name: 'getConversations', methods: ['POST'])]
     public function index(Request $request, User $user, int $id)
     {
         $otherUser = $request->get('otherUser', 0);
         $otherUser = $this->userRepository->find($id);
         $userId = $user->getId();
 
+     
         if (is_null($otherUser)) {
             throw new \Exception("The user was not found");
         }
-
+        /*
         // cannot create a conversation with myself
         if ($otherUser->getId() === $userId) {
+
             throw new \Exception("That's deep but you cannot create a conversation with yourself");
         }
+        */
 
         // Check if conversation already exists
         $conversation = $this->conversationRepository->findConversationByParticipants(
@@ -82,7 +87,6 @@ class ConversationController extends AbstractController
 
             $this->entityManager->flush();
             $this->entityManager->commit();
-
         } catch (\Exception $e) {
             $this->entityManager->rollback();
             throw $e;
@@ -93,8 +97,8 @@ class ConversationController extends AbstractController
             'id' => $conversation->getId()
         ], Response::HTTP_CREATED, [], []);
     }
-    
-    #[Route('/', name: 'getConversations', methods:['GET'])]
+
+    /*#[Route('/', name: 'getConversations', methods:['GET'])]
     public function getConvs(User $user) {
         dd($user);
         $userId = $user->getId();
@@ -102,5 +106,5 @@ class ConversationController extends AbstractController
         $conversations = $this->conversationRepository->findConversationsByUser($userId);
 
         return $this->json($conversations);
-    }
+    }*/
 }
