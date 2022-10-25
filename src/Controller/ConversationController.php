@@ -13,9 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-/**
- * @Route("/conversations", name="conversations.")
- */
+
+#[Route('/conversations', name: 'conversations.')]
 class ConversationController extends AbstractController
 {
     /**
@@ -31,19 +30,18 @@ class ConversationController extends AbstractController
      */
     private $conversationRepository;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager,
-ConversationRepository $conversationRepository)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, ConversationRepository $conversationRepository)
     {
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
         $this->conversationRepository = $conversationRepository;
     }
 
-    #[Route('/', name: 'newConversations', methods:['POST'])]
-    public function index(Request $request, User $user)
+    #[Route('/{id}', name: 'newConversations', methods:['POST'])]
+    public function index(Request $request, User $user, int $id)
     {
         $otherUser = $request->get('otherUser', 0);
-        $otherUser = $this->userRepository->find($otherUser);
+        $otherUser = $this->userRepository->find($id);
         $userId = $user->getId();
 
         if (is_null($otherUser)) {
@@ -97,11 +95,12 @@ ConversationRepository $conversationRepository)
     }
     
     #[Route('/', name: 'getConversations', methods:['GET'])]
-    public function getConvs() {
-        $conversations = $this->conversationRepository->findConversationsByUser($this->getUser()->getId());
-        
+    public function getConvs(User $user) {
+        dd($user);
+        $userId = $user->getId();
+        //dd($userId);
+        $conversations = $this->conversationRepository->findConversationsByUser($userId);
 
         return $this->json($conversations);
     }
-
 }
