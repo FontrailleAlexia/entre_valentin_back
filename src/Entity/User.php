@@ -69,13 +69,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $search = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class)]
-    private Collection $messages;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Participant::class)]
-    private Collection $participants;
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -304,66 +297,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSearch(string $search): self
     {
         $this->search = $search;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Message>
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): self
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages->add($message);
-            $message->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): self
-    {
-        if ($this->messages->removeElement($message)) {
-            // set the owning side to null (unless already changed)
-            if ($message->getUser() === $this) {
-                $message->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Participant>
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
-    }
-
-    public function addParticipant(Participant $participant): self
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
-            $participant->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipant(Participant $participant): self
-    {
-        if ($this->participants->removeElement($participant)) {
-            // set the owning side to null (unless already changed)
-            if ($participant->getUser() === $this) {
-                $participant->setUser(null);
-            }
-        }
 
         return $this;
     }
